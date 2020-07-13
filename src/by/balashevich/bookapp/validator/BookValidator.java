@@ -1,6 +1,6 @@
 package by.balashevich.bookapp.validator;
 
-import by.balashevich.bookapp.entity.Language;
+import by.balashevich.bookapp.model.entity.Language;
 
 import java.time.Year;
 import java.util.List;
@@ -20,7 +20,7 @@ public class BookValidator {
     public boolean validateTitle(String title) {
         boolean isValid = false;
 
-        if (!title.isBlank()) {
+        if (title != null && !title.isBlank()) {
             if (title.length() > 0 && title.length() <= MAX_TITLE_LENGTH) {
                 if (title.matches(WORD_CHARACTER)) {
                     isValid = true;
@@ -34,7 +34,7 @@ public class BookValidator {
     public boolean validateAuthors(List<String> authors) {
         boolean isValid = false;
 
-        if (!authors.isEmpty()) {
+        if (authors != null && !authors.isEmpty()) {
             if (authors.size() < MAX_AUTHORS_NUMBER) {
                 int correctAuthorsIndex = 0;
 
@@ -54,7 +54,7 @@ public class BookValidator {
     public boolean validateSingleAuthor(String author) {
         boolean isValid = false;
 
-        if (!author.isEmpty()) {
+        if (author != null && !author.isEmpty()) {
             if (author.length() < MAX_AUTHOR_LENGTH && author.matches(WORD_CHARACTER)) {
                 isValid = true;
             }

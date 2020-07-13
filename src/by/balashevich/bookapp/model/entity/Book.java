@@ -1,4 +1,5 @@
-package by.balashevich.bookapp.entity;
+package by.balashevich.bookapp.model.entity;
+
 
 import by.balashevich.bookapp.generator.IdGenerator;
 

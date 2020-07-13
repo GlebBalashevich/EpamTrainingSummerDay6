@@ -1,16 +1,17 @@
 package by.balashevich.bookapp.dao;
 
-import by.balashevich.bookapp.entity.Book;
-import by.balashevich.bookapp.entity.Language;
-import by.balashevich.bookapp.exception.ApplicationInvalidDataException;
+import by.balashevich.bookapp.exception.DaoApplicationException;
+import by.balashevich.bookapp.model.entity.Book;
+import by.balashevich.bookapp.model.entity.Language;
+import by.balashevich.bookapp.exception.ServiceApplicationException;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface BookListDao {
-    void addBook(Book book) throws ApplicationInvalidDataException;
+    void addBook(Book book) throws ServiceApplicationException, DaoApplicationException;
 
-    void removeBook(Book book) throws ApplicationInvalidDataException;
+    void removeBook(Book book) throws ServiceApplicationException, DaoApplicationException;
 
     Optional<Book> findById(long bookId);
 

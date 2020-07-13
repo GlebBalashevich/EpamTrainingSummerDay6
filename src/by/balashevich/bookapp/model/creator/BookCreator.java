@@ -1,8 +1,8 @@
-package by.balashevich.bookapp.creator;
+package by.balashevich.bookapp.model.creator;
 
-import by.balashevich.bookapp.entity.Book;
-import by.balashevich.bookapp.entity.Language;
-import by.balashevich.bookapp.exception.ApplicationInvalidDataException;
+import by.balashevich.bookapp.model.entity.Book;
+import by.balashevich.bookapp.model.entity.Language;
+import by.balashevich.bookapp.exception.ServiceApplicationException;
 import by.balashevich.bookapp.validator.BookValidator;
 
 import java.util.ArrayList;
@@ -10,18 +10,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class BookCreator {
-    private static final String BOOK_PREFIX = "Book{";
-    private static final String BOOK_SUFFIX = "}";
-    private static final String BLANK = "";
     private static final String LINE_DELIMITER = ";";
     private static final String LIST_DELIMITER = ",";
     private static final String ELEMENT_DELIMITER = ":";
-    private static final String LIST_PREFIX = "[";
-    private static final String LIST_SUFFIX = "]";
 
-    public Book createBook(String bookData) throws ApplicationInvalidDataException {
+    public Book createBook(String bookData) throws ServiceApplicationException {
         BookValidator bookValidator = new BookValidator();
-        bookData = bookData.replace(BOOK_PREFIX, BLANK).replace(BOOK_SUFFIX, BLANK);
         String[] bookElements = bookData.split(LINE_DELIMITER);
         String title = null;
         List<String> authors = null;
@@ -48,14 +42,13 @@ public class BookCreator {
         }
 
         if (!bookValidator.validateBookElements(title, authors, yearPublication, language)) {
-            throw new ApplicationInvalidDataException("Invalid data for book creating");
+            throw new ServiceApplicationException("Invalid data for book creating");
         }
 
         return new Book(title, authors, yearPublication, language);
     }
 
     public List<String> createList(String listData) {
-        listData = listData.replace(LIST_PREFIX, BLANK).replace(LIST_SUFFIX, BLANK);
         String[] elementsList = listData.split(LIST_DELIMITER);
         List<String> resultList = new ArrayList<>();
         Collections.addAll(resultList, elementsList);
@@ -63,7 +56,7 @@ public class BookCreator {
         return resultList;
     }
 
-    public List<Book> createBooksList(List<String> booksData) throws ApplicationInvalidDataException {
+    public List<Book> createBooksList(List<String> booksData) throws ServiceApplicationException {
         List<Book> booksList = new ArrayList<>();
 
         for (String bookData : booksData) {
