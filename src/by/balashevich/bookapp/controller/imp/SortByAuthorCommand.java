@@ -13,14 +13,13 @@ import java.util.Map;
 public class SortByAuthorCommand implements ActionCommand {
 
     @Override
-    public Map<String, Object> execute(Map<String, Object> actionParameters) throws CommandApplicationException {
+    public Map<String, String> execute(Map<String, String> actionParameters) throws CommandApplicationException {
         BookServiceImpl bookService = new BookServiceImpl();
-        Map<String, Object> executeResult = new HashMap<>();
-        List<Book> sortResult;
+        Map<String, String> executeResult = new HashMap<>();
 
         try {
-            sortResult = bookService.sortByAuthor();
-            executeResult.put("refreshPage", sortResult);
+            List<Book> sortResult = bookService.sortByAuthor();
+            executeResult.put("refreshPage", sortResult.toString()); // FIXME: 14.07.2020 return map
         } catch (ServiceApplicationException e) {
             throw new CommandApplicationException("Error with data", e);
         }

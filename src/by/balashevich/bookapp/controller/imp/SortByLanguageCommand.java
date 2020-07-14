@@ -13,14 +13,14 @@ import java.util.Map;
 public class SortByLanguageCommand implements ActionCommand {
 
     @Override
-    public Map<String, Object> execute(Map<String, Object> actionParameters) throws CommandApplicationException {
+    public Map<String, String> execute(Map<String, String> actionParameters) throws CommandApplicationException {
         BookServiceImpl bookService = new BookServiceImpl();
-        Map<String, Object> executeResult = new HashMap<>();
+        Map<String, String> executeResult = new HashMap<>();
         List<Book> sortResult;
 
         try {
             sortResult = bookService.sortByLanguage();
-            executeResult.put("refreshPage", sortResult);
+            executeResult.put("refreshPage", sortResult.toString()); // FIXME: 14.07.2020 return map
         } catch (ServiceApplicationException e) {
             throw new CommandApplicationException("Error with data", e);
         }

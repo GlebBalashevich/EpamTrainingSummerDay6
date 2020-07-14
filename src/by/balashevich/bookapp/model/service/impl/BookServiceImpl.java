@@ -1,6 +1,6 @@
 package by.balashevich.bookapp.model.service.impl;
 
-import by.balashevich.bookapp.dao.impl.BookListDaoImpl;
+import by.balashevich.bookapp.model.dao.impl.BookListDaoImpl;
 import by.balashevich.bookapp.exception.ServiceApplicationException;
 import by.balashevich.bookapp.exception.DaoApplicationException;
 import by.balashevich.bookapp.model.entity.Book;
@@ -8,6 +8,7 @@ import by.balashevich.bookapp.model.entity.Language;
 import by.balashevich.bookapp.model.service.BookService;
 import by.balashevich.bookapp.validator.BookValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,8 +17,9 @@ public class BookServiceImpl implements BookService {
     @Override
     public void addBook(Book book) throws ServiceApplicationException {
         BookListDaoImpl bookListDao = new BookListDaoImpl();
+
         try {
-            bookListDao.addBook(book);
+            bookListDao.add(book);
         } catch (DaoApplicationException e) {
             throw new ServiceApplicationException("Error while adding book to storage", e);
         }
@@ -26,8 +28,9 @@ public class BookServiceImpl implements BookService {
     @Override
     public void removeBook(Book book) throws ServiceApplicationException {
         BookListDaoImpl bookListDao = new BookListDaoImpl();
+
         try {
-            bookListDao.removeBook(book);
+            bookListDao.remove(book);
         } catch (DaoApplicationException e) {
             throw new ServiceApplicationException("Error while removing book from storage", e);
         }
@@ -36,55 +39,60 @@ public class BookServiceImpl implements BookService {
     @Override
     public Optional<Book> findById(long bookId) {
         BookListDaoImpl bookListDao = new BookListDaoImpl();
+        Optional<Book> targetBook = bookListDao.findById(bookId);
 
-        return bookListDao.findById(bookId);
+        return targetBook;
     }
 
     @Override
-    public List<Book> findByTitle(String title) throws ServiceApplicationException {
+    public List<Book> findByTitle(String title){
         BookListDaoImpl bookListDao = new BookListDaoImpl();
         BookValidator bookValidator = new BookValidator();
+        List<Book> targetBooks = new ArrayList<>();
 
-        if (!bookValidator.validateTitle(title)) {
-            throw new ServiceApplicationException("Invalid search by Title request");
+        if (bookValidator.validateTitle(title)) {
+            targetBooks = bookListDao.findByTitle(title);
         }
 
-        return bookListDao.findByTitle(title);
+        return targetBooks;
     }
 
     @Override
-    public List<Book> findByAuthor(String author) throws ServiceApplicationException {
+    public List<Book> findByAuthor(String author){
         BookListDaoImpl bookListDao = new BookListDaoImpl();
         BookValidator bookValidator = new BookValidator();
+        List<Book> targetBooks = new ArrayList<>();
 
-        if (!bookValidator.validateSingleAuthor(author)) {
-            throw new ServiceApplicationException("Invalid search by Author request");
+        if (bookValidator.validateSingleAuthor(author)) {
+            targetBooks = bookListDao.findByAuthor(author);
         }
 
-        return bookListDao.findByAuthor(author);
+        return targetBooks;
     }
 
     @Override
-    public List<Book> findByYearPublication(int yearPublication) throws ServiceApplicationException {
+    public List<Book> findByYearPublication(int yearPublication){
         BookListDaoImpl bookListDao = new BookListDaoImpl();
         BookValidator bookValidator = new BookValidator();
+        List<Book> targetBooks = new ArrayList<>();
 
-        if (!bookValidator.validateYearPublication(yearPublication)) {
-            throw new ServiceApplicationException("Invalid search by Year publication request");
+        if (bookValidator.validateYearPublication(yearPublication)) {
+            targetBooks = bookListDao.findByYearPublication(yearPublication);
         }
 
-        return bookListDao.findByYearPublication(yearPublication);
+        return targetBooks;
     }
 
     @Override
-    public List<Book> findByLanguage(Language language) throws ServiceApplicationException {
+    public List<Book> findByLanguage(Language language){
         BookListDaoImpl bookListDao = new BookListDaoImpl();
+        List<Book> targetBooks = new ArrayList<>();
 
-        if (language == null) {
-            throw new ServiceApplicationException("Invalid search by Language request");
+        if (language != null) {
+            targetBooks = bookListDao.findByLanguage(language);
         }
 
-        return bookListDao.findByLanguage(language);
+        return targetBooks;
     }
 
     @Override
@@ -92,7 +100,7 @@ public class BookServiceImpl implements BookService {
         BookListDaoImpl bookListDao = new BookListDaoImpl();
         List<Book> sortedList = bookListDao.sortById();
 
-        if (sortedList.isEmpty()) {
+        if (sortedList.size() != bookListDao.findAll().size()) {
             throw new ServiceApplicationException("Error in sorting by Id method");
         }
 
@@ -104,7 +112,7 @@ public class BookServiceImpl implements BookService {
         BookListDaoImpl bookListDao = new BookListDaoImpl();
         List<Book> sortedList = bookListDao.sortByTitle();
 
-        if (sortedList.isEmpty()) {
+        if (sortedList.size() != bookListDao.findAll().size()) {
             throw new ServiceApplicationException("Error in sorting by Title method");
         }
 
@@ -116,7 +124,7 @@ public class BookServiceImpl implements BookService {
         BookListDaoImpl bookListDao = new BookListDaoImpl();
         List<Book> sortedList = bookListDao.sortByAuthor();
 
-        if (sortedList.isEmpty()) {
+        if (sortedList.size() != bookListDao.findAll().size()) {
             throw new ServiceApplicationException("Error in sorting by Author method");
         }
 
@@ -128,7 +136,7 @@ public class BookServiceImpl implements BookService {
         BookListDaoImpl bookListDao = new BookListDaoImpl();
         List<Book> sortedList = bookListDao.sortByYearPublication();
 
-        if (sortedList.isEmpty()) {
+        if (sortedList.size() != bookListDao.findAll().size()) {
             throw new ServiceApplicationException("Error in sorting by Year publication method");
         }
 
@@ -140,7 +148,7 @@ public class BookServiceImpl implements BookService {
         BookListDaoImpl bookListDao = new BookListDaoImpl();
         List<Book> sortedList = bookListDao.sortByLanguage();
 
-        if (sortedList.isEmpty()) {
+        if (sortedList.size() != bookListDao.findAll().size()) {
             throw new ServiceApplicationException("Error in sorting by Language method");
         }
 

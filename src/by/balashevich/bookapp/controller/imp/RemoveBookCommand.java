@@ -9,25 +9,30 @@ import by.balashevich.bookapp.model.service.impl.BookServiceImpl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class RemoveBookCommand implements ActionCommand {
     private static final String BOOK_PARAMS = "bookParams";
 
     @Override
-    public Map<String, Object> execute(Map<String, Object> actionParameters) throws CommandApplicationException {
+    public Map<String, String> execute(Map<String, String> actionParameters) throws CommandApplicationException {
         BookServiceImpl bookService = new BookServiceImpl();
         BookCreator bookCreator = new BookCreator();
-        Book removingBook;
-        Map<String, Object> executeResult = new HashMap<>();
+        Map<String, String> executeResult = new HashMap<>();
 
         if (actionParameters.containsKey(BOOK_PARAMS)) {
-            try {
-                removingBook = bookCreator.createBook((String) actionParameters.get(BOOK_PARAMS));
-                bookService.removeBook(removingBook);
-                executeResult.put("refreshPage", "Book successfully removed");
+            Optional<Book> transferredBook = bookCreator.createBook(actionParameters.get(BOOK_PARAMS));
+            if (transferredBook.isPresent()) {
+                try {
+                    Book removingBook = transferredBook.get();
+                    bookService.removeBook(removingBook);
+                    executeResult.put("refreshPage", "Book successfully removed");
 
-            } catch (ServiceApplicationException e) {
-                throw new CommandApplicationException("Error with data", e);
+                } catch (ServiceApplicationException e) {
+                    throw new CommandApplicationException("Error with data", e);
+                }
+            } else {
+                throw new CommandApplicationException("Error in command parameters");
             }
         } else {
             throw new CommandApplicationException("Error in command parameters");

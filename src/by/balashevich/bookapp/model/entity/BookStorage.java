@@ -33,7 +33,4 @@ public class BookStorage {
         return books.remove(book);
     }
 
-    public int getSize() {
-        return books.size();
-    }
 }

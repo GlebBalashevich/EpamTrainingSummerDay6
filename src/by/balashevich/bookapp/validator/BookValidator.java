@@ -22,9 +22,7 @@ public class BookValidator {
 
         if (title != null && !title.isBlank()) {
             if (title.length() > 0 && title.length() <= MAX_TITLE_LENGTH) {
-                if (title.matches(WORD_CHARACTER)) {
-                    isValid = true;
-                }
+                isValid = title.matches(WORD_CHARACTER);
             }
         }
 
@@ -39,7 +37,7 @@ public class BookValidator {
                 int correctAuthorsIndex = 0;
 
                 for (String author : authors) {
-                    if (validateSingleAuthor(author)){
+                    if (validateSingleAuthor(author)) {
                         correctAuthorsIndex++;
                     }
                 }
@@ -55,8 +53,8 @@ public class BookValidator {
         boolean isValid = false;
 
         if (author != null && !author.isEmpty()) {
-            if (author.length() < MAX_AUTHOR_LENGTH && author.matches(WORD_CHARACTER)) {
-                isValid = true;
+            if (author.length() < MAX_AUTHOR_LENGTH) {
+                isValid = author.matches(WORD_CHARACTER);
             }
         }
 

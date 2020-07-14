@@ -2,20 +2,21 @@ package by.balashevich.bookapp.model.creator;
 
 import by.balashevich.bookapp.model.entity.Book;
 import by.balashevich.bookapp.model.entity.Language;
-import by.balashevich.bookapp.exception.ServiceApplicationException;
 import by.balashevich.bookapp.validator.BookValidator;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class BookCreator {
     private static final String LINE_DELIMITER = ";";
     private static final String LIST_DELIMITER = ",";
     private static final String ELEMENT_DELIMITER = ":";
 
-    public Book createBook(String bookData) throws ServiceApplicationException {
+    public Optional<Book> createBook(String bookData){
         BookValidator bookValidator = new BookValidator();
+        Optional<Book> createdBook = Optional.empty();
         String[] bookElements = bookData.split(LINE_DELIMITER);
         String title = null;
         List<String> authors = null;
@@ -42,10 +43,10 @@ public class BookCreator {
         }
 
         if (!bookValidator.validateBookElements(title, authors, yearPublication, language)) {
-            throw new ServiceApplicationException("Invalid data for book creating");
+            createdBook = Optional.of(new Book(title, authors, yearPublication, language));
         }
 
-        return new Book(title, authors, yearPublication, language);
+        return createdBook;
     }
 
     public List<String> createList(String listData) {
@@ -54,15 +55,5 @@ public class BookCreator {
         Collections.addAll(resultList, elementsList);
 
         return resultList;
-    }
-
-    public List<Book> createBooksList(List<String> booksData) throws ServiceApplicationException {
-        List<Book> booksList = new ArrayList<>();
-
-        for (String bookData : booksData) {
-            booksList.add(createBook(bookData));
-        }
-
-        return booksList;
     }
 }

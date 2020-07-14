@@ -1,6 +1,6 @@
-package by.balashevich.bookapp.dao.impl;
+package by.balashevich.bookapp.model.dao.impl;
 
-import by.balashevich.bookapp.dao.BookListDao;
+import by.balashevich.bookapp.model.dao.BookListDao;
 import by.balashevich.bookapp.exception.DaoApplicationException;
 import by.balashevich.bookapp.model.entity.Book;
 import by.balashevich.bookapp.model.entity.Language;
@@ -11,7 +11,7 @@ import java.util.*;
 public class BookListDaoImpl implements BookListDao {
 
     @Override
-    public void addBook(Book book) throws DaoApplicationException {
+    public void add(Book book) throws DaoApplicationException {
         List<Book> books = BookStorage.getInstance().getBooks();
         boolean addingResult = false;
 
@@ -22,14 +22,20 @@ public class BookListDaoImpl implements BookListDao {
         if(!addingResult){
             throw new DaoApplicationException("Error while adding book to storage");
         }
-
     }
 
     @Override
-    public void removeBook(Book book) throws DaoApplicationException {
+    public void remove(Book book) throws DaoApplicationException {
         if(!BookStorage.getInstance().removeBook(book)){
             throw new DaoApplicationException("Error while removing book from storage");
         }
+    }
+
+    @Override
+    public List<Book> findAll() {
+        List<Book> targetBooks = BookStorage.getInstance().getBooks();
+
+        return targetBooks;
     }
 
     @Override

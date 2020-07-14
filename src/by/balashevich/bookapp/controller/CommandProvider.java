@@ -4,7 +4,7 @@ import by.balashevich.bookapp.exception.CommandApplicationException;
 
 public class CommandProvider {
 
-    public static ActionCommand defineCommand(String command) throws CommandApplicationException {
+    public ActionCommand defineCommand(String command) throws CommandApplicationException {
         ActionCommand definedCommand = null;
 
         if (command != null && !command.isBlank()){
