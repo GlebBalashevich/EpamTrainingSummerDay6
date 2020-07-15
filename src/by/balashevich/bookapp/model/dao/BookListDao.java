@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookListDao {
-    void add(Book book) throws DaoApplicationException;
+    List<Book> add(Book book) throws DaoApplicationException;
 
-    void remove(Book book) throws DaoApplicationException;
+    List<Book> remove(Book book) throws DaoApplicationException;
 
     Optional<Book> findById(long bookId);
 

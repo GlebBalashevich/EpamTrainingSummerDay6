@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookService {
-    void addBook(Book book) throws ServiceApplicationException;
+    List<Book> addBook(Book book) throws ServiceApplicationException;
 
-    void removeBook(Book book) throws ServiceApplicationException;
+    List<Book> removeBook(Book book) throws ServiceApplicationException;
 
     Optional<Book> findById(long bookId);
 

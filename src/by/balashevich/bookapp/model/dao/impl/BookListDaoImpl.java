@@ -11,24 +11,27 @@ import java.util.*;
 public class BookListDaoImpl implements BookListDao {
 
     @Override
-    public void add(Book book) throws DaoApplicationException {
-        List<Book> books = BookStorage.getInstance().getBooks();
-        boolean addingResult = false;
-
-        if (!books.contains(book)) {
-            addingResult = BookStorage.getInstance().addBook(book);
-        }
+    public List<Book> add(Book book) throws DaoApplicationException {
+        boolean addingResult = BookStorage.getInstance().addBook(book);
 
         if(!addingResult){
             throw new DaoApplicationException("Error while adding book to storage");
         }
+
+        List<Book> bookList = BookStorage.getInstance().getBooks();
+
+        return bookList;
     }
 
     @Override
-    public void remove(Book book) throws DaoApplicationException {
+    public List<Book> remove(Book book) throws DaoApplicationException {
         if(!BookStorage.getInstance().removeBook(book)){
             throw new DaoApplicationException("Error while removing book from storage");
         }
+
+        List<Book> bookList = BookStorage.getInstance().getBooks();
+
+        return bookList;
     }
 
     @Override

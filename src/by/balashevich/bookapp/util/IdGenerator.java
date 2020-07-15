@@ -1,4 +1,4 @@
-package by.balashevich.bookapp.generator;
+package by.balashevich.bookapp.util;
 
 public class IdGenerator {
     private static final long MIN_ID = 1;

@@ -1,6 +1,6 @@
-package by.balashevich.bookapp.controller;
+package by.balashevich.bookapp.controller.command;
 
-import by.balashevich.bookapp.controller.imp.*;
+import by.balashevich.bookapp.controller.command.imp.*;
 
 public enum CommandType {
     ADD_BOOK(new AddBookCommand()),
@@ -14,7 +14,8 @@ public enum CommandType {
     SORT_TITLE(new SortByTitleCommand()),
     SORT_AUTHOR(new SortByAuthorCommand()),
     SORT_YEAR_PUBLICATION(new SortByYearPublicationCommand()),
-    SORT_LANGUAGE(new SortByLanguageCommand());
+    SORT_LANGUAGE(new SortByLanguageCommand()),
+    EMPTY_COMMAND(new EmptyCommand());
 
     private ActionCommand command;
 

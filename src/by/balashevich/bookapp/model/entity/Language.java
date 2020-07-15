@@ -3,7 +3,6 @@ package by.balashevich.bookapp.model.entity;
 public enum Language {
     RUSSIAN("Russian"),
     ENGLISH("English"),
-    CHINESE("Chinese"),
     GERMAN("German"),
     ITALIAN("Italian");
 

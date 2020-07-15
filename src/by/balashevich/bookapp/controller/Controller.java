@@ -1,24 +1,27 @@
 package by.balashevich.bookapp.controller;
 
-import by.balashevich.bookapp.exception.CommandApplicationException;
+import by.balashevich.bookapp.controller.command.ActionCommand;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class Controller {
+    private static Controller instance;
 
-    public Map<String, String> doBookAction(String commandType, Map<String, String> actionParameters) {
-        Map<String, String> actionResult = new HashMap<>();
+    private Controller() {
+    }
 
-        try {
-            CommandProvider command = new CommandProvider();
-            ActionCommand actionCommand = command.defineCommand(commandType);
-            actionResult = actionCommand.execute(actionParameters);
-        } catch (CommandApplicationException e) {
-            actionResult.put("errorPage", "Error in application" + e.getMessage());
+    public static Controller getInstance() {
+        if (instance == null) {
+            instance = new Controller();
         }
 
-        // FIXME: 14.07.2020 refactor that method change type, eception 
+        return instance;
+    }
+
+    public Map<String, String> doBookAction(String commandType, Map<String, String> actionParameters) {
+        CommandProvider command = new CommandProvider();
+        ActionCommand actionCommand = command.defineCommand(commandType);
+        Map<String, String> actionResult = actionCommand.execute(actionParameters);
 
         return actionResult;
     }

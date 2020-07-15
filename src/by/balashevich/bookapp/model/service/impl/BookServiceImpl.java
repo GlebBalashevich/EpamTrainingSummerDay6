@@ -15,25 +15,31 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
 
     @Override
-    public void addBook(Book book) throws ServiceApplicationException {
+    public List<Book> addBook(Book book) throws ServiceApplicationException {
         BookListDaoImpl bookListDao = new BookListDaoImpl();
+        List<Book> bookList;
 
         try {
-            bookListDao.add(book);
+            bookList = bookListDao.add(book);
         } catch (DaoApplicationException e) {
             throw new ServiceApplicationException("Error while adding book to storage", e);
         }
+
+        return bookList;
     }
 
     @Override
-    public void removeBook(Book book) throws ServiceApplicationException {
+    public List<Book> removeBook(Book book) throws ServiceApplicationException {
         BookListDaoImpl bookListDao = new BookListDaoImpl();
+        List<Book> bookList;
 
         try {
-            bookListDao.remove(book);
+            bookList = bookListDao.remove(book);
         } catch (DaoApplicationException e) {
             throw new ServiceApplicationException("Error while removing book from storage", e);
         }
+
+        return bookList;
     }
 
     @Override
