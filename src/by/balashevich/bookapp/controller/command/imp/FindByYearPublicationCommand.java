@@ -1,6 +1,7 @@
 package by.balashevich.bookapp.controller.command.imp;
 
 import by.balashevich.bookapp.controller.command.ActionCommand;
+import by.balashevich.bookapp.controller.command.ResponseParameterType;
 import by.balashevich.bookapp.model.entity.Book;
 import by.balashevich.bookapp.model.service.impl.BookServiceImpl;
 import by.balashevich.bookapp.util.ConfigurationManager;
@@ -9,8 +10,6 @@ import by.balashevich.bookapp.util.MessageManager;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static by.balashevich.bookapp.controller.command.ResponseParameterType.*;
 
 public class FindByYearPublicationCommand implements ActionCommand {
     private static final String YEAR_PUBLICATION = "yearPublication";
@@ -26,14 +25,14 @@ public class FindByYearPublicationCommand implements ActionCommand {
             int yearPublication = Integer.parseInt(actionParameters.get(YEAR_PUBLICATION));
             List<Book> findResult = bookService.findByYearPublication(yearPublication);
             if (!findResult.isEmpty()) {
-                executeResult.put(PAGE.getName(), ConfigurationManager.getProperty(PAGE_SEARCH_RESULT));
-                executeResult.put(BOOK_STORAGE.getName(), findResult.toString());
+                executeResult.put(ResponseParameterType.PAGE.getName(), ConfigurationManager.getProperty(PAGE_SEARCH_RESULT));
+                executeResult.put(ResponseParameterType.BOOK_STORAGE.getName(), findResult.toString());
             }
         }
 
         if (executeResult.isEmpty()) {
-            executeResult.put(PAGE.getName(), ConfigurationManager.getProperty(PAGE_SEARCH_RESULT));
-            executeResult.put(MESSAGE.getName(), MessageManager.getMessage(MESSAGE_FIND_EMPTY));
+            executeResult.put(ResponseParameterType.PAGE.getName(), ConfigurationManager.getProperty(PAGE_SEARCH_RESULT));
+            executeResult.put(ResponseParameterType.MESSAGE.getName(), MessageManager.getMessage(MESSAGE_FIND_EMPTY));
         }
 
         return executeResult;

@@ -1,6 +1,7 @@
 package by.balashevich.bookapp.controller.command.imp;
 
 import by.balashevich.bookapp.controller.command.ActionCommand;
+import by.balashevich.bookapp.controller.command.ResponseParameterType;
 import by.balashevich.bookapp.exception.ServiceApplicationException;
 import by.balashevich.bookapp.model.creator.BookCreator;
 import by.balashevich.bookapp.model.entity.Book;
@@ -13,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static by.balashevich.bookapp.controller.command.ResponseParameterType.*;
 
 public class AddBookCommand implements ActionCommand {
     private static final String BOOK_PARAMS = "bookParams";
@@ -35,19 +35,19 @@ public class AddBookCommand implements ActionCommand {
                 try {
                     Book addingBook = transferredBook.get();
                     List<Book> bookList = bookService.addBook(addingBook);
-                    executeResult.put(PAGE.getName(), ConfigurationManager.getProperty(PAGE_MAIN));
-                    executeResult.put(BOOK_STORAGE.getName(), bookList.toString());
-                    executeResult.put(MESSAGE.getName(), MessageManager.getMessage(MESSAGE_ADD_SUCCESSFULLY));
+                    executeResult.put(ResponseParameterType.PAGE.getName(), ConfigurationManager.getProperty(PAGE_MAIN));
+                    executeResult.put(ResponseParameterType.BOOK_STORAGE.getName(), bookList.toString());
+                    executeResult.put(ResponseParameterType.MESSAGE.getName(), MessageManager.getMessage(MESSAGE_ADD_SUCCESSFULLY));
                 } catch (ServiceApplicationException e) {
-                    executeResult.put(PAGE.getName(), ConfigurationManager.getProperty(PAGE_ERROR));
-                    executeResult.put(MESSAGE.getName(), MessageManager.getMessage(MESSAGE_APP_ERROR) + e.getMessage());
+                    executeResult.put(ResponseParameterType.PAGE.getName(), ConfigurationManager.getProperty(PAGE_ERROR));
+                    executeResult.put(ResponseParameterType.MESSAGE.getName(), MessageManager.getMessage(MESSAGE_APP_ERROR) + e.getMessage());
                 }
             }
         }
 
         if (executeResult.isEmpty()){
-            executeResult.put(PAGE.getName(), ConfigurationManager.getProperty(PAGE_MAIN));
-            executeResult.put(MESSAGE.getName(), MessageManager.getMessage(MESSAGE_ADD_UNSUCCESSFULLY));
+            executeResult.put(ResponseParameterType.PAGE.getName(), ConfigurationManager.getProperty(PAGE_MAIN));
+            executeResult.put(ResponseParameterType.MESSAGE.getName(), MessageManager.getMessage(MESSAGE_ADD_UNSUCCESSFULLY));
         }
 
         return executeResult;

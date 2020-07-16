@@ -1,6 +1,7 @@
 package by.balashevich.bookapp.controller.command.imp;
 
 import by.balashevich.bookapp.controller.command.ActionCommand;
+import by.balashevich.bookapp.controller.command.ResponseParameterType;
 import by.balashevich.bookapp.model.entity.Book;
 import by.balashevich.bookapp.model.service.impl.BookServiceImpl;
 import by.balashevich.bookapp.util.ConfigurationManager;
@@ -9,8 +10,6 @@ import by.balashevich.bookapp.util.MessageManager;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
-import static by.balashevich.bookapp.controller.command.ResponseParameterType.*;
 
 public class FindByIdCommand implements ActionCommand {
     private static final String BOOK_ID = "bookId";
@@ -27,14 +26,14 @@ public class FindByIdCommand implements ActionCommand {
             long bookId = Long.parseLong(actionParameters.get(BOOK_ID));
             Optional<Book> findResult = bookService.findById(bookId);
             if (findResult.isPresent()) {
-                executeResult.put(PAGE.getName(), ConfigurationManager.getProperty(PAGE_ITEM_CARD));
-                executeResult.put(BOOK_STORAGE.getName(), findResult.get().toString());
+                executeResult.put(ResponseParameterType.PAGE.getName(), ConfigurationManager.getProperty(PAGE_ITEM_CARD));
+                executeResult.put(ResponseParameterType.BOOK_STORAGE.getName(), findResult.get().toString());
             }
         }
 
         if (executeResult.isEmpty()) {
-            executeResult.put(PAGE.getName(), ConfigurationManager.getProperty(PAGE_MAIN));
-            executeResult.put(MESSAGE.getName(), MessageManager.getMessage(MESSAGE_FIND_EMPTY));
+            executeResult.put(ResponseParameterType.PAGE.getName(), ConfigurationManager.getProperty(PAGE_MAIN));
+            executeResult.put(ResponseParameterType.MESSAGE.getName(), MessageManager.getMessage(MESSAGE_FIND_EMPTY));
         }
 
         return executeResult;
