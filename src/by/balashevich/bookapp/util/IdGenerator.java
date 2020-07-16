@@ -12,7 +12,7 @@ public class IdGenerator {
     public static long generateId(){
         id++;
 
-        if (id >= MAX_ID) {
+        if (id > MAX_ID) {
             id = MIN_ID;
         }
 

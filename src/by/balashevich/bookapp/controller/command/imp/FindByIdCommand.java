@@ -14,7 +14,8 @@ import static by.balashevich.bookapp.controller.command.ResponseParameterType.*;
 
 public class FindByIdCommand implements ActionCommand {
     private static final String BOOK_ID = "bookId";
-    private static final String PAGE_SEARCH_RESULT = "page.path.searchresult";
+    private static final String PAGE_ITEM_CARD = "page.path.itemcard";
+    private static final String PAGE_MAIN = "page.path.main";
     private static final String MESSAGE_FIND_EMPTY = "message.findempty";
 
     @Override
@@ -26,13 +27,13 @@ public class FindByIdCommand implements ActionCommand {
             long bookId = Long.parseLong(actionParameters.get(BOOK_ID));
             Optional<Book> findResult = bookService.findById(bookId);
             if (findResult.isPresent()) {
-                executeResult.put(PAGE.getName(), ConfigurationManager.getProperty(PAGE_SEARCH_RESULT));
+                executeResult.put(PAGE.getName(), ConfigurationManager.getProperty(PAGE_ITEM_CARD));
                 executeResult.put(BOOK_STORAGE.getName(), findResult.get().toString());
             }
         }
 
         if (executeResult.isEmpty()) {
-            executeResult.put(PAGE.getName(), ConfigurationManager.getProperty(PAGE_SEARCH_RESULT));
+            executeResult.put(PAGE.getName(), ConfigurationManager.getProperty(PAGE_MAIN));
             executeResult.put(MESSAGE.getName(), MessageManager.getMessage(MESSAGE_FIND_EMPTY));
         }
 

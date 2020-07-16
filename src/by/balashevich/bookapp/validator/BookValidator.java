@@ -8,8 +8,9 @@ import java.util.List;
 public class BookValidator {
     private static final int MAX_TITLE_LENGTH = 255;
     private static final int MAX_AUTHOR_LENGTH = 40;
-    private static final int MAX_AUTHORS_NUMBER = 8;
-    private static final String WORD_CHARACTER = "\\w";
+    private static final int MAX_AUTHORS_NUMBER = 4;
+    private static final String TITLE_CHARACTER = "[\\w\\p{Space}\\p{Pd}\\.']+";
+    private static final String AUTHOR_CHARACTER = "[\\p{L}\\p{Space}\\.]+";
 
     public boolean validateBookElements(String title, List<String> authors, int yearPublication, Language language) {
         return validateTitle(title) &&
@@ -22,7 +23,7 @@ public class BookValidator {
 
         if (title != null && !title.isBlank()) {
             if (title.length() > 0 && title.length() <= MAX_TITLE_LENGTH) {
-                isValid = title.matches(WORD_CHARACTER);
+                isValid = title.matches(TITLE_CHARACTER);
             }
         }
 
@@ -54,7 +55,7 @@ public class BookValidator {
 
         if (author != null && !author.isEmpty()) {
             if (author.length() < MAX_AUTHOR_LENGTH) {
-                isValid = author.matches(WORD_CHARACTER);
+                isValid = author.matches(AUTHOR_CHARACTER);
             }
         }
 
@@ -63,6 +64,6 @@ public class BookValidator {
 
     public boolean validateYearPublication(int yearPublication) {
 
-        return (yearPublication > 0) && (yearPublication < Year.now().getValue());
+        return (yearPublication > 0) && (yearPublication <= Year.now().getValue());
     }
 }

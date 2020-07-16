@@ -5,7 +5,6 @@ import by.balashevich.bookapp.model.entity.Language;
 import by.balashevich.bookapp.validator.BookValidator;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +41,7 @@ public class BookCreator {
             }
         }
 
-        if (!bookValidator.validateBookElements(title, authors, yearPublication, language)) {
+        if (bookValidator.validateBookElements(title, authors, yearPublication, language)) {
             createdBook = Optional.of(new Book(title, authors, yearPublication, language));
         }
 
@@ -52,7 +51,10 @@ public class BookCreator {
     public List<String> createList(String listData) {
         String[] elementsList = listData.split(LIST_DELIMITER);
         List<String> resultList = new ArrayList<>();
-        Collections.addAll(resultList, elementsList);
+
+        for(String author : elementsList){
+            resultList.add(author.trim());
+        }
 
         return resultList;
     }
