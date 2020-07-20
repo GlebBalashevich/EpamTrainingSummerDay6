@@ -1,7 +1,6 @@
 package by.balashevich.bookapp.model.entity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -13,18 +12,6 @@ public class BookStorage {
 
     private BookStorage() {
         books = new ArrayList<>();
-        books.add(new Book("The Lord Of The Rings", new ArrayList<>(Arrays.asList("J.R.R.Tolkien")),
-                1954, Language.ENGLISH));
-        books.add(new Book("Airport", new ArrayList<>(Arrays.asList("A. Heiley")),
-                1968, Language.ENGLISH));
-        books.add(new Book("Three comrades", new ArrayList<>(Arrays.asList("E. M. Remarque")),
-                1936, Language.GERMAN));
-        books.add(new Book("Kindred", new ArrayList<>(Arrays.asList("A. Pekhov", "E. Bychkova", "N. Turchaninova")),
-                2006, Language.RUSSIAN));
-        books.add(new Book("Divine comedy", new ArrayList<>(Arrays.asList("Dante Alighieri")),
-                1265, Language.ITALIAN));
-        books.add(new Book("The Hobbit", new ArrayList<>(Arrays.asList("J.R.R.Tolkien")),
-                1937, Language.ENGLISH));
     }
 
     public static BookStorage getInstance() {
@@ -52,5 +39,4 @@ public class BookStorage {
     public boolean removeBook(Book book) {
         return books.remove(book);
     }
-
 }

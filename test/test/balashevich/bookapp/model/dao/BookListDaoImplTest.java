@@ -1,9 +1,9 @@
-package test.balashevich.bookapp.model.service.impl;
+package test.balashevich.bookapp.model.dao;
 
-import by.balashevich.bookapp.exception.ServiceApplicationException;
+import by.balashevich.bookapp.exception.DaoApplicationException;
+import by.balashevich.bookapp.model.dao.impl.BookListDaoImpl;
 import by.balashevich.bookapp.model.entity.Book;
 import by.balashevich.bookapp.model.entity.Language;
-import by.balashevich.bookapp.model.service.impl.BookServiceImpl;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -16,12 +16,12 @@ import java.util.Optional;
 
 import static org.testng.Assert.*;
 
-public class BookServiceImplTest {
-    BookServiceImpl bookService;
+public class BookListDaoImplTest {
+    BookListDaoImpl bookListDao;
 
     @BeforeTest
     public void setUp() {
-        bookService = new BookServiceImpl();
+        bookListDao = new BookListDaoImpl();
     }
 
     @BeforeMethod
@@ -31,37 +31,45 @@ public class BookServiceImplTest {
     }
 
     @Test
-    public void addBookTestPositive() throws ServiceApplicationException {
+    public void addTestPositive() throws DaoApplicationException {
         List<Book> expected = FakeBookStorage.getBaseBookList();
         Book addingBook = new Book("Master and Margarita",
                 new ArrayList<>(Arrays.asList("M.Bulgakov")), 1928, Language.RUSSIAN);
         expected.add(addingBook);
-        List<Book> actual = bookService.addBook(addingBook);
+        List<Book> actual = bookListDao.add(addingBook);
 
         assertEquals(actual, expected);
     }
 
-    @Test(expectedExceptions = ServiceApplicationException.class)
-    public void addBookTestException() throws ServiceApplicationException {
+    @Test(expectedExceptions = DaoApplicationException.class)
+    public void addTestException() throws DaoApplicationException {
         Book addingBook = FakeBookStorage.getBaseBookList().get(0);
-        bookService.addBook(addingBook);
+        bookListDao.add(addingBook);
     }
 
     @Test
-    public void removeBookTestPositive() throws ServiceApplicationException {
+    public void removeTestPositive() throws DaoApplicationException {
         List<Book> expected = FakeBookStorage.getBaseBookList();
         Book removingBook = expected.get(0);
         expected.remove(removingBook);
-        List<Book> actual = bookService.removeBook(removingBook);
+        List<Book> actual = bookListDao.remove(removingBook);
 
         assertEquals(actual, expected);
     }
 
-    @Test(expectedExceptions = ServiceApplicationException.class)
-    public void removeBookTestException() throws ServiceApplicationException {
+    @Test(expectedExceptions = DaoApplicationException.class)
+    public void removeTestException() throws DaoApplicationException {
         Book removingBook = new Book("Master and Margarita",
                 new ArrayList<>(Arrays.asList("M.Bulgakov")), 1928, Language.RUSSIAN);
-        bookService.removeBook(removingBook);
+        bookListDao.remove(removingBook);
+    }
+
+    @Test
+    public void findAllTestPositive() {
+        List<Book> expected = FakeBookStorage.getBaseBookList();
+        List<Book> actual = bookListDao.findAll();
+
+        assertEquals(actual, expected);
     }
 
     @Test
@@ -75,7 +83,7 @@ public class BookServiceImplTest {
             }
         }
 
-        Optional<Book> actual = bookService.findById(id);
+        Optional<Book> actual = bookListDao.findById(id);
         assertEquals(actual, expected);
     }
 
@@ -84,7 +92,7 @@ public class BookServiceImplTest {
         long id = 101;
         Optional<Book> expected = Optional.empty();
 
-        Optional<Book> actual = bookService.findById(id);
+        Optional<Book> actual = bookListDao.findById(id);
         assertEquals(actual, expected);
     }
 
@@ -99,7 +107,7 @@ public class BookServiceImplTest {
             }
         }
 
-        List<Book> actual = bookService.findByTitle(title);
+        List<Book> actual = bookListDao.findByTitle(title);
         assertEquals(actual, expected);
     }
 
@@ -108,7 +116,7 @@ public class BookServiceImplTest {
         String title = "";
         List<Book> expected = new ArrayList<>();
 
-        List<Book> actual = bookService.findByTitle(title);
+        List<Book> actual = bookListDao.findByTitle(title);
         assertEquals(actual, expected);
     }
 
@@ -123,7 +131,7 @@ public class BookServiceImplTest {
             }
         }
 
-        List<Book> actual = bookService.findByAuthor(author);
+        List<Book> actual = bookListDao.findByAuthor(author);
         assertEquals(actual, expected);
     }
 
@@ -132,7 +140,7 @@ public class BookServiceImplTest {
         String author = "";
         List<Book> expected = new ArrayList<>();
 
-        List<Book> actual = bookService.findByAuthor(author);
+        List<Book> actual = bookListDao.findByAuthor(author);
         assertEquals(actual, expected);
     }
 
@@ -147,7 +155,7 @@ public class BookServiceImplTest {
             }
         }
 
-        List<Book> actual = bookService.findByYearPublication(yearPublication);
+        List<Book> actual = bookListDao.findByYearPublication(yearPublication);
         assertEquals(actual, expected);
     }
 
@@ -156,7 +164,7 @@ public class BookServiceImplTest {
         int yearPublication = 3201;
         List<Book> expected = new ArrayList<>();
 
-        List<Book> actual = bookService.findByYearPublication(yearPublication);
+        List<Book> actual = bookListDao.findByYearPublication(yearPublication);
         assertEquals(actual, expected);
     }
 
@@ -171,7 +179,7 @@ public class BookServiceImplTest {
             }
         }
 
-        List<Book> actual = bookService.findByLanguage(language);
+        List<Book> actual = bookListDao.findByLanguage(language);
         assertEquals(actual, expected);
     }
 
@@ -180,14 +188,14 @@ public class BookServiceImplTest {
         Language language = null;
         List<Book> expected = new ArrayList<>();
 
-        List<Book> actual = bookService.findByLanguage(language);
+        List<Book> actual = bookListDao.findByLanguage(language);
         assertEquals(actual, expected);
     }
 
     @Test
     public void sortByIdTestPositive() {
         List<Book> expected = FakeBookStorage.getSortedByIdBookList();
-        List<Book> actual = bookService.sortById();
+        List<Book> actual = bookListDao.sortById();
 
         assertEquals(actual, expected);
     }
@@ -195,7 +203,7 @@ public class BookServiceImplTest {
     @Test
     public void sortByIdTestNegative() {
         List<Book> expected = FakeBookStorage.getBaseBookList();
-        List<Book> actual = bookService.sortById();
+        List<Book> actual = bookListDao.sortById();
 
         assertNotEquals(actual, expected);
     }
@@ -203,7 +211,7 @@ public class BookServiceImplTest {
     @Test
     public void sortByTitleTestPositive() {
         List<Book> expected = FakeBookStorage.getSortedByTitleBookList();
-        List<Book> actual = bookService.sortByTitle();
+        List<Book> actual = bookListDao.sortByTitle();
 
         assertEquals(actual, expected);
     }
@@ -211,7 +219,7 @@ public class BookServiceImplTest {
     @Test
     public void sortByTitleTestNegative() {
         List<Book> expected = FakeBookStorage.getBaseBookList();
-        List<Book> actual = bookService.sortByTitle();
+        List<Book> actual = bookListDao.sortByTitle();
 
         assertNotEquals(actual, expected);
     }
@@ -219,7 +227,7 @@ public class BookServiceImplTest {
     @Test
     public void sortByAuthorTestPositive() {
         List<Book> expected = FakeBookStorage.getSortedByAuthorBookList();
-        List<Book> actual = bookService.sortByAuthor();
+        List<Book> actual = bookListDao.sortByAuthor();
 
         assertEquals(actual, expected);
     }
@@ -227,7 +235,7 @@ public class BookServiceImplTest {
     @Test
     public void sortByAuthorTestNegative() {
         List<Book> expected = FakeBookStorage.getBaseBookList();
-        List<Book> actual = bookService.sortByAuthor();
+        List<Book> actual = bookListDao.sortByAuthor();
 
         assertNotEquals(actual, expected);
     }
@@ -235,7 +243,7 @@ public class BookServiceImplTest {
     @Test
     public void sortByYearPublicationTestPositive() {
         List<Book> expected = FakeBookStorage.getSortedByYearPublicationBookList();
-        List<Book> actual = bookService.sortByYearPublication();
+        List<Book> actual = bookListDao.sortByYearPublication();
 
         assertEquals(actual, expected);
     }
@@ -243,7 +251,7 @@ public class BookServiceImplTest {
     @Test
     public void sortByYearPublicationTestNegative() {
         List<Book> expected = FakeBookStorage.getBaseBookList();
-        List<Book> actual = bookService.sortByYearPublication();
+        List<Book> actual = bookListDao.sortByYearPublication();
 
         assertNotEquals(actual, expected);
     }
@@ -251,7 +259,7 @@ public class BookServiceImplTest {
     @Test
     public void sortByLanguageTestPositive() {
         List<Book> expected = FakeBookStorage.getSortedByLanguageBookList();
-        List<Book> actual = bookService.sortByLanguage();
+        List<Book> actual = bookListDao.sortByLanguage();
 
         assertEquals(actual, expected);
     }
@@ -259,7 +267,7 @@ public class BookServiceImplTest {
     @Test
     public void sortByLanguageTestNegative() {
         List<Book> expected = FakeBookStorage.getBaseBookList();
-        List<Book> actual = bookService.sortByLanguage();
+        List<Book> actual = bookListDao.sortByLanguage();
 
         assertNotEquals(actual, expected);
     }

@@ -1,6 +1,5 @@
 package by.balashevich.bookapp.model.entity;
 
-
 import by.balashevich.bookapp.util.IdGenerator;
 
 import java.util.List;

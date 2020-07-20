@@ -140,8 +140,11 @@ public class BookListDaoImpl implements BookListDao {
         List<Book> books = BookStorage.getInstance().getBooks();
         List<Book> sortedBooks = new ArrayList<>(books);
 
-        sortedBooks.sort(Comparator.comparingInt((Book book) -> book.getAuthors().size()).
-                thenComparing(book -> book.getAuthors().get(0)));
+        sortedBooks.sort((book1, book2) -> {
+            book1.getAuthors().sort(String::compareTo);
+            book2.getAuthors().sort(String::compareTo);
+            return book1.getAuthors().get(0).compareTo(book2.getAuthors().get(0));
+        });
 
         return sortedBooks;
     }
@@ -165,5 +168,4 @@ public class BookListDaoImpl implements BookListDao {
 
         return sortedBooks;
     }
-
 }

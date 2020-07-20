@@ -1,13 +1,13 @@
 package by.balashevich.bookapp.controller.command.imp;
 
 import by.balashevich.bookapp.controller.command.ActionCommand;
+import by.balashevich.bookapp.controller.command.PagePath;
+import by.balashevich.bookapp.controller.command.ResponseMessage;
 import by.balashevich.bookapp.controller.command.ResponseParameterType;
 import by.balashevich.bookapp.exception.ServiceApplicationException;
 import by.balashevich.bookapp.model.creator.BookCreator;
 import by.balashevich.bookapp.model.entity.Book;
 import by.balashevich.bookapp.model.service.impl.BookServiceImpl;
-import by.balashevich.bookapp.util.ConfigurationManager;
-import by.balashevich.bookapp.util.MessageManager;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,12 +16,6 @@ import java.util.Optional;
 
 public class RemoveBookCommand implements ActionCommand {
     private static final String BOOK_PARAMS = "bookParams";
-    private static final String PAGE_MAIN = "page.path.main";
-    private static final String PAGE_ERROR = "page.path.error";
-    private static final String MESSAGE_REMOVE_SUCCESSFULLY = "message.removesuccessfully";
-    private static final String MESSAGE_REMOVE_UNSUCCESSFULLY = "message.removeunsuccessfully";
-    private static final String MESSAGE_APP_ERROR = "message.apperror";
-
 
     @Override
     public Map<String, String> execute(Map<String, String> actionParameters) {
@@ -35,19 +29,19 @@ public class RemoveBookCommand implements ActionCommand {
                 try {
                     Book removingBook = transferredBook.get();
                     List<Book> bookList = bookService.removeBook(removingBook);
-                    executeResult.put(ResponseParameterType.PAGE.getName(), ConfigurationManager.getProperty(PAGE_MAIN));
+                    executeResult.put(ResponseParameterType.PAGE.getName(), PagePath.MAIN.getPath());
                     executeResult.put(ResponseParameterType.BOOK_STORAGE.getName(), bookList.toString());
-                    executeResult.put(ResponseParameterType.MESSAGE.getName(), MessageManager.getMessage(MESSAGE_REMOVE_SUCCESSFULLY));
+                    executeResult.put(ResponseParameterType.MESSAGE.getName(), ResponseMessage.REMOVESUCCESSFULLY.getText());
                 } catch (ServiceApplicationException e) {
-                    executeResult.put(ResponseParameterType.PAGE.getName(), ConfigurationManager.getProperty(PAGE_ERROR));
-                    executeResult.put(ResponseParameterType.MESSAGE.getName(), MessageManager.getMessage(MESSAGE_APP_ERROR) + e.getMessage());
+                    executeResult.put(ResponseParameterType.PAGE.getName(), PagePath.ERROR.getPath());
+                    executeResult.put(ResponseParameterType.MESSAGE.getName(),ResponseMessage.APPERROR.getText() + e.getMessage());
                 }
             }
         }
 
         if (executeResult.isEmpty()) {
-            executeResult.put(ResponseParameterType.PAGE.getName(), ConfigurationManager.getProperty(PAGE_MAIN));
-            executeResult.put(ResponseParameterType.MESSAGE.getName(), MessageManager.getMessage(MESSAGE_REMOVE_UNSUCCESSFULLY));
+            executeResult.put(ResponseParameterType.PAGE.getName(), PagePath.MAIN.getPath());
+            executeResult.put(ResponseParameterType.MESSAGE.getName(), ResponseMessage.REMOVEUNSUCCESSFULLY.getText());
         }
 
         return executeResult;
